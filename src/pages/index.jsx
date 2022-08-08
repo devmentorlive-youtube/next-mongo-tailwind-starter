@@ -1,7 +1,18 @@
-export default function Homepage() {
-  return (
-    <div className="mt-16 container mx-auto">
-      <h1>Hello world.</h1>
-    </div>
-  );
+import { getTodos } from "@/api/todos";
+import { jsonify } from "@/modules/db";
+
+import TodoList from "@/features/todo/list";
+
+export default function Homepage({ todos = [] }) {
+  return <TodoList {...{ todos }} />;
+}
+
+export async function getServerSideProps(req) {
+  const todos = await getTodos();
+
+  return {
+    props: {
+      todos: jsonify(todos),
+    },
+  };
 }
